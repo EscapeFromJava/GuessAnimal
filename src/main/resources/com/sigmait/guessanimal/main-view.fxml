@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sigmait.guessanimal.controller.MainController">
+   <children>
+      <Button alignment="CENTER" layoutX="192.0" layoutY="175.0" mnemonicParsing="false" onAction="#onButtonYesClick" prefWidth="80.0" text="Да" />
+      <Button alignment="CENTER" layoutX="329.0" layoutY="175.0" mnemonicParsing="false" onAction="#onButtonNoClick" prefWidth="80.0" text="Нет" />
+      <Label fx:id="lblQuestion" alignment="CENTER" layoutX="230.0" layoutY="80.0" prefHeight="17.0" prefWidth="140.0" />
+   </children>
+</AnchorPane>
