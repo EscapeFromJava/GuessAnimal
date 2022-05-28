@@ -1,14 +1,13 @@
 package com.sigmait.guessanimal.controller;
 
 import com.sigmait.guessanimal.requests.Insert;
-import com.sigmait.guessanimal.requests.Procedure;
 import com.sigmait.guessanimal.requests.Select;
-import javafx.event.ActionEvent;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,27 +16,28 @@ import java.util.ArrayList;
 
 public class MainController {
     @FXML
-    Button btnRestart, btnResultYes, btnResultNo;
+    private Button btnRestart, btnAddAnimal;
     @FXML
-    TextField textName, textDescription;
+    private Label lblAnswer, lblDifference, lblQuestion;
     @FXML
-    AnchorPane paneAddAnimal, paneResult;
+    private TextField textName, textDescription;
     @FXML
-    Label lblAnswer, lblQuestion;
-    ArrayList<String> positiveAnswers = new ArrayList<>();
-    ArrayList<String> negativeAnswers = new ArrayList<>();
-
-    String currentQuestion = "";
-    Connection conn;
+    private VBox vBoxAddAnimal, vBoxStart, vBoxQuestions, vBoxResult;
+    private ArrayList<String> positiveAnswers = new ArrayList<>();
+    private ArrayList<String> negativeAnswers = new ArrayList<>();
+    private Connection conn;
+    private String currentQuestion = "";
+    private String possibleAnimal = "";
 
     public void initialize() {
         connectingSQL();
-        currentQuestion = getQuestion();
-        lblQuestion.setText("Ваше животное " + currentQuestion + "?");
-    }
-
-    private String getQuestion() {
-        return Select.getFirstQuestion(conn);
+        btnAddAnimal.disableProperty().bind(
+                Bindings.isEmpty(textName.textProperty()).
+                        or(Bindings.isEmpty(textDescription.textProperty()))
+        );
+        textName.textProperty().addListener((observableValue, s, t1) -> {
+            lblDifference.setText("Чем " + t1 + " отличается от " + possibleAnimal + "?");
+        });
     }
 
     private void connectingSQL() {
@@ -48,64 +48,77 @@ public class MainController {
         }
     }
 
-    public void onButtonYesClick(ActionEvent actionEvent) {
-        positiveAnswers.add(currentQuestion);
-        getAnswer();
+    public void onButtonStartClick() {
+        vBoxStart.setVisible(false);
+        vBoxQuestions.setVisible(true);
+        currentQuestion = getFirstQuestion();
+        lblQuestion.setText("Ваше животное " + currentQuestion + "?");
+
     }
 
-    public void onButtonNoClick(ActionEvent actionEvent) {
-        negativeAnswers.add(currentQuestion);
-        getAnswer();
+    private String getFirstQuestion() {
+        return Select.getFirstQuestion(conn);
     }
 
-    private void getAnswer() {
+    private void getListAnimals() {
         ArrayList<String> animals = Select.getAnimals(conn, positiveAnswers, negativeAnswers);
         if (animals.size() == 1) {
-            paneResult.setVisible(true);
-            btnResultYes.setVisible(true);
-            btnResultNo.setVisible(true);
-            lblAnswer.setText("Вы загадали " + animals.get(0) + "?");
+            guessAnimal(animals);
         } else {
-            currentQuestion = Select.nextQuestion(conn, animals, positiveAnswers);
-            lblQuestion.setText("Ваше животное " + currentQuestion + "?");
+            getNextQuestion(animals);
         }
     }
 
-    public void onButtonRestartClick(ActionEvent actionEvent) {
-        restartGame();
-    }
-
-    private void restartGame() {
-        currentQuestion = getQuestion();
+    private void getNextQuestion(ArrayList<String> animals){
+        currentQuestion = Select.nextQuestion(conn, animals, positiveAnswers);
         lblQuestion.setText("Ваше животное " + currentQuestion + "?");
-        paneResult.setVisible(false);
-        positiveAnswers.clear();
-        negativeAnswers.clear();
-        btnRestart.setVisible(false);
-        paneAddAnimal.setVisible(false);
-        btnResultYes.setVisible(false);
-        btnResultNo.setVisible(false);
+    }
+    private void guessAnimal(ArrayList<String> animals){
+        vBoxQuestions.setVisible(false);
+        vBoxResult.setVisible(true);
+        possibleAnimal = animals.get(0);
+        lblAnswer.setText("Вы загадали " + possibleAnimal + "?");
     }
 
-    public void onButtonResultYesClick(ActionEvent actionEvent) {
+    public void onButtonYesClick() {
+        positiveAnswers.add(currentQuestion);
+        getListAnimals();
+    }
+
+    public void onButtonNoClick() {
+        negativeAnswers.add(currentQuestion);
+        getListAnimals();
+    }
+
+    public void onButtonResultYesClick() {
         btnRestart.setVisible(true);
+        vBoxResult.setVisible(false);
     }
 
-    public void onButtonResultNoClick(ActionEvent actionEvent) {
-        paneAddAnimal.setVisible(true);
+    public void onButtonResultNoClick() {
+        vBoxAddAnimal.setVisible(true);
+        vBoxResult.setVisible(false);
     }
 
-    public void onButtonAddAnimal(ActionEvent actionEvent) {
+    public void onButtonAddAnimal() {
         int newIdAnimal = Insert.insertNewAnimal(conn, textName.getText());
         int newIdDescription = Insert.insertNewDescription(conn, textDescription.getText());
         Insert.insertAnimalInDescription(conn, newIdAnimal, newIdDescription, positiveAnswers);
         btnRestart.setVisible(true);
         textName.clear();
         textDescription.clear();
+        vBoxAddAnimal.setVisible(false);
     }
 
-    public void onButtonClearDBClick(ActionEvent actionEvent) {
-        Procedure.clearDB(conn);
+    public void onButtonRestartClick() {
         restartGame();
+    }
+
+    private void restartGame() {
+        positiveAnswers.clear();
+        negativeAnswers.clear();
+        btnRestart.setVisible(false);
+        vBoxResult.setVisible(false);
+        vBoxStart.setVisible(true);
     }
 }

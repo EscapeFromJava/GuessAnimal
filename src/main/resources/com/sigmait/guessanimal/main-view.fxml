@@ -1,32 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sigmait.guessanimal.controller.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-font-size: 14pt ;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sigmait.guessanimal.controller.MainController">
    <children>
-      <Button alignment="CENTER" layoutX="192.0" layoutY="91.0" mnemonicParsing="false" onAction="#onButtonYesClick" prefWidth="80.0" text="Да" />
-      <Button alignment="CENTER" layoutX="329.0" layoutY="91.0" mnemonicParsing="false" onAction="#onButtonNoClick" prefWidth="80.0" text="Нет" />
-      <Label fx:id="lblQuestion" alignment="CENTER" layoutX="300.0" layoutY="40.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
-      <AnchorPane fx:id="paneResult" layoutX="14.0" layoutY="183.0" prefHeight="200.0" prefWidth="571.0" style="-fx-background-color: grey;" visible="false">
+      <ImageView fitHeight="400.0" fitWidth="600.0" opacity="0.1" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <image>
+            <Image url="@img/wallpaper.jpg" />
+         </image>
+      </ImageView>
+      <VBox fx:id="vBoxStart" alignment="CENTER" layoutX="183.0" layoutY="174.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label fx:id="lblAnswer" alignment="CENTER" layoutX="286.0" layoutY="14.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
-            <Button fx:id="btnRestart" layoutX="436.0" layoutY="137.0" mnemonicParsing="false" onAction="#onButtonRestartClick" text="Сыграть еще раз?" visible="false" />
-            <Button fx:id="btnResultYes" alignment="CENTER" layoutX="176.0" layoutY="54.0" mnemonicParsing="false" onAction="#onButtonResultYesClick" prefWidth="80.0" text="Да" visible="false" />
-            <Button fx:id="btnResultNo" alignment="CENTER" layoutX="316.0" layoutY="54.0" mnemonicParsing="false" onAction="#onButtonResultNoClick" prefWidth="80.0" text="Нет" visible="false" />
-            <AnchorPane fx:id="paneAddAnimal" layoutX="14.0" layoutY="100.0" prefHeight="98.0" prefWidth="389.0" visible="false">
-               <children>
-                  <TextField fx:id="textName" layoutX="88.12890625" prefHeight="25.0" prefWidth="300.0" />
-                  <TextField fx:id="textDescription" layoutX="88.12890625" layoutY="33.0" prefWidth="300.0" />
-                  <Label layoutX="0.12890625" layoutY="4.0" text="Животное:" />
-                  <Label layoutX="1.12890625" layoutY="37.0" text="Описание:" />
-                  <Button alignment="CENTER" layoutX="160.0" layoutY="72.0" mnemonicParsing="false" onAction="#onButtonAddAnimal" text="Добавить" />
-               </children>
-            </AnchorPane>
+            <Label alignment="CENTER" text="Загадайте животное, а я попробую угадать..." />
+            <Button alignment="CENTER" mnemonicParsing="false" onAction="#onButtonStartClick" style="-fx-background-color: lightgreen;" text="Загадал" />
          </children>
-      </AnchorPane>
-      <Button layoutX="20.0" layoutY="14.0" mnemonicParsing="false" onAction="#onButtonClearDBClick" text="Очистить БД?" />
+      </VBox>
+      <VBox fx:id="vBoxQuestions" alignment="CENTER" spacing="10.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label fx:id="lblQuestion" alignment="CENTER" />
+            <HBox alignment="CENTER" spacing="50.0">
+               <children>
+                  <Button alignment="CENTER" minWidth="80.0" mnemonicParsing="false" onAction="#onButtonYesClick" style="-fx-background-color: lightgreen;" text="Да" />
+                  <Button alignment="CENTER" minWidth="80.0" mnemonicParsing="false" onAction="#onButtonNoClick" style="-fx-background-color: pink;" text="Нет" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <VBox fx:id="vBoxResult" alignment="CENTER" spacing="10.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label fx:id="lblAnswer" alignment="CENTER" textFill="#00900e" />
+            <HBox alignment="CENTER" spacing="50.0">
+               <children>
+                  <Button alignment="CENTER" minWidth="80.0" mnemonicParsing="false" onAction="#onButtonResultYesClick" style="-fx-background-color: lightgreen;" text="Да" />
+                  <Button alignment="CENTER" minWidth="80.0" mnemonicParsing="false" onAction="#onButtonResultNoClick" style="-fx-background-color: pink;" text="Нет" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <VBox fx:id="vBoxAddAnimal" alignment="CENTER" layoutX="15.0" layoutY="152.0" prefHeight="151.0" prefWidth="484.0" spacing="10.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label alignment="CENTER" text="Какое животное вы загадали?" />
+            <Label alignment="CENTER" text="Животное:" />
+            <TextField fx:id="textName" alignment="CENTER" prefHeight="25.0" prefWidth="407.0" />
+            <Label fx:id="lblDifference" alignment="CENTER" prefHeight="17.0" prefWidth="500.0" text="Чем отличается?" />
+            <TextField fx:id="textDescription" alignment="CENTER" prefHeight="25.0" prefWidth="407.0" />
+            <Button fx:id="btnAddAnimal" alignment="CENTER" defaultButton="true" disable="true" minWidth="80.0" mnemonicParsing="false" onAction="#onButtonAddAnimal" style="-fx-background-color: lightgreen;" text="Добавить" />
+         </children>
+      </VBox>
+      <Button fx:id="btnRestart" layoutX="216.0" layoutY="181.0" mnemonicParsing="false" onAction="#onButtonRestartClick" style="-fx-background-color: lightgreen;" text="Сыграть еще раз" visible="false" AnchorPane.bottomAnchor="180.0" AnchorPane.leftAnchor="216.0" AnchorPane.rightAnchor="216.0" AnchorPane.topAnchor="181.0" />
    </children>
 </AnchorPane>

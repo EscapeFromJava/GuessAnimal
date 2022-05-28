@@ -10,7 +10,7 @@ public class Select {
     public static String getFirstQuestion(Connection conn) {
         String discription = "";
         try {
-            String request = "SELECT text FROM description OFFSET FLOOR (RANDOM() * (SELECT COUNT(*) FROM description)) LIMIT 1";
+            String request = "SELECT text FROM description OFFSET FLOOR (RANDOM() * (SELECT COUNT(*) FROM description)) LIMIT 1;";
             PreparedStatement statement = conn.prepareStatement(request);
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
@@ -19,7 +19,6 @@ public class Select {
         } catch (SQLException e) {
             System.out.println("getFirstQuestion ERROR: " + e.getMessage());
         }
-
         return discription;
     }
 
@@ -42,6 +41,8 @@ public class Select {
                 sbRequest.append(" AND ");
             }
         }
+        sbRequest.append(";");
+
         ArrayList<String> result = new ArrayList<>();
         try {
             PreparedStatement statement = conn.prepareStatement(String.valueOf(sbRequest));
@@ -75,7 +76,7 @@ public class Select {
             }
             sbRequest.append(") ");
         }
-        sbRequest.append("LIMIT 1");
+        sbRequest.append("LIMIT 1;");
 
         String discription = "";
         try {
