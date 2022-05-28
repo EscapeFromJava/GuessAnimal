@@ -51,13 +51,8 @@ public class MainController {
     public void onButtonStartClick() {
         vBoxStart.setVisible(false);
         vBoxQuestions.setVisible(true);
-        currentQuestion = getFirstQuestion();
-        lblQuestion.setText("Ваше животное " + currentQuestion + "?");
-
-    }
-
-    private String getFirstQuestion() {
-        return Select.getFirstQuestion(conn);
+        currentQuestion = "живет на суше";
+        lblQuestion.setText("Это животное " + currentQuestion + "?");
     }
 
     private void getListAnimals() {
@@ -69,9 +64,9 @@ public class MainController {
         }
     }
 
-    private void getNextQuestion(ArrayList<String> animals){
-        currentQuestion = Select.nextQuestion(conn, animals, positiveAnswers);
-        lblQuestion.setText("Ваше животное " + currentQuestion + "?");
+    private void getNextQuestion(ArrayList<String> animals) {
+        currentQuestion = Select.getQuestion(conn, animals, positiveAnswers);
+        lblQuestion.setText("Это животное " + currentQuestion + "?");
     }
     private void guessAnimal(ArrayList<String> animals){
         vBoxQuestions.setVisible(false);

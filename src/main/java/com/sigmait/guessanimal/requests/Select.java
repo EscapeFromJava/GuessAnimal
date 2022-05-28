@@ -7,20 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Select {
-    public static String getFirstQuestion(Connection conn) {
-        String discription = "";
-        try {
-            String request = "SELECT text FROM description OFFSET FLOOR (RANDOM() * (SELECT COUNT(*) FROM description)) LIMIT 1;";
-            PreparedStatement statement = conn.prepareStatement(request);
-            ResultSet rs = statement.executeQuery();
-            while (rs.next()) {
-                discription = rs.getString("text");
-            }
-        } catch (SQLException e) {
-            System.out.println("getFirstQuestion ERROR: " + e.getMessage());
-        }
-        return discription;
-    }
 
     public static ArrayList<String> getAnimals(Connection conn, ArrayList<String> positiveAnswers, ArrayList<String> negativeAnswers) {
         StringBuilder sbRequest = new StringBuilder("SELECT DISTINCT name FROM animal WHERE ");
@@ -57,7 +43,7 @@ public class Select {
         return result;
     }
 
-    public static String nextQuestion(Connection conn, ArrayList<String> animals, ArrayList<String> positiveAnswers) {
+    public static String getQuestion(Connection conn, ArrayList<String> animals, ArrayList<String> positiveAnswers) {
         StringBuilder sbRequest = new StringBuilder("SELECT text FROM relations WHERE name IN (");
         for (int i = 0; i < animals.size(); i++) {
             sbRequest.append("'" + animals.get(i) + "'");
@@ -77,6 +63,8 @@ public class Select {
             sbRequest.append(") ");
         }
         sbRequest.append("LIMIT 1;");
+
+        System.out.println(sbRequest);
 
         String discription = "";
         try {
