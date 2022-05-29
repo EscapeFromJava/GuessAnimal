@@ -64,8 +64,6 @@ public class Select {
         }
         sbRequest.append("LIMIT 1;");
 
-        System.out.println(sbRequest);
-
         String discription = "";
         try {
             PreparedStatement statement = conn.prepareStatement(String.valueOf(sbRequest));
